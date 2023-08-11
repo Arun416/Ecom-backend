@@ -5,7 +5,12 @@ const {signUp,login,getUsers,updateProfile} = require('../controllers/userContro
 
 const {createProduct,getProducts,getProduct,updateProduct,deleteProduct,searchProducts} = require('../controllers/productControllers');
 
+const {addCartProduct,viewCart} = require('../controllers/cartControllers');
+
 const { body, validationResult } = require('express-validator');
+
+const authenticateToken = require('../verifyToken'); // Import your authentication middleware
+
 
 const router =  Router();
 
@@ -31,6 +36,12 @@ router.patch('/product/:id',authorize(['seller']),updateProduct)
 
 router.delete('/product/:id',authorize(['seller']), deleteProduct)
 
-router.get('/search-product',authorize(),searchProducts)
+router.get('/search-product',authorize(),searchProducts);
+
+router.post('/add-to-cart/:productId',authorize(['user']),addCartProduct)
+
+router.get('/cart',authorize(['user']),viewCart)
+
+// router.get('/trend-products',getProducts)
 
 module.exports = router;

@@ -1,21 +1,15 @@
 const jwt = require('jsonwebtoken');
 
-function verifyToken(req){
-    return new Promise((resolve,reject)=>{
-        if(req.headers && req,headers.authorization){
-            let tok = req.headers.authorization;
-            let decoded
-            try{
-                decoded = jwt.verify(tok,"secret");
-            }
-            catch(e){
-                reject("Token not valid")
-            }
-            let userId =  decoded._id
-            
-        }
-    })
-}
-  
+function authenticateToken(req, res, next) {
+  const token = req.header('Authorization');
+  if (!token) return res.status(401).send('Access denied.');
 
-module.exports = verifyToken
+  jwt.verify(token, 'secretkey', (err, user) => {
+    if (err) return res.status(403).send('Invalid token.');
+    req.user = user;
+    console.log(req.user)
+    next();
+  });
+}
+
+module.exports = authenticateToken;

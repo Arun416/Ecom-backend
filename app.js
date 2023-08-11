@@ -7,6 +7,8 @@ const { body, validationResult } = require('express-validator');
 
 const mongoose = require('mongoose');
 
+const session = require('express-session');
+
 const userRoutes  = require('./routes/routes');
 
 const cors = require('cors');
@@ -23,6 +25,8 @@ app.use(cors())
 app.use(express.json())
 
 app.use(express.urlencoded({extended: false}));
+
+app.use(session({ secret: 'secretkey', resave: true, saveUninitialized: true }));
 
 app.use('/',userRoutes)
 

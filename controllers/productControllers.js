@@ -1,6 +1,6 @@
-const product = require('../models/Product');
 const Product = require('../models/Product');
 
+//create a product
 
 const createProduct = async(req,res)=>{
     try {
@@ -17,9 +17,22 @@ const createProduct = async(req,res)=>{
     }
 }
 
+
+//get Products and get by category
+
 const getProducts = async(req,res)=>{
+    const { category } = req.query;
+    let product
     try {
-        const product = await Product.find({});
+        
+        if(category){
+            product = await Product.find({ category: category })
+
+        }
+        else {
+            product = await Product.find();
+        }
+
         res.status(200).json({
             product
         })
@@ -106,6 +119,7 @@ const deleteProduct = async(req,res)=>{
     }
 }
 
+//Search a product
 
 const searchProducts = async(req,res)=>{
     var search = req.query.name;
