@@ -1,15 +1,25 @@
 const {Router}  =  require('express');
 const authorize = require('../middlewares/auth');
 
-const {signUp,login,getUsers,updateProfile} = require('../controllers/userControllers')
+const {signUp,
+       login,
+       getUsers,
+       updateProfile} = require('../controllers/userControllers')
 
-const {createProduct,getProducts,getProduct,updateProduct,deleteProduct,searchProducts} = require('../controllers/productControllers');
+const {createProduct,
+       getProducts,
+       getProduct,
+       updateProduct,
+       deleteProduct,
+       searchProducts} = require('../controllers/productControllers');
 
-const {addCartProduct,viewCart} = require('../controllers/cartControllers');
+const {addCartProduct,
+       viewCart,
+       removeCartFromList,
+       emptyCartItems,
+       updateCartProduct} = require('../controllers/cartControllers');
 
 const { body, validationResult } = require('express-validator');
-
-const authenticateToken = require('../verifyToken'); // Import your authentication middleware
 
 
 const router =  Router();
@@ -42,6 +52,11 @@ router.post('/add-to-cart/:productId',authorize(['user']),addCartProduct)
 
 router.get('/cart',authorize(['user']),viewCart)
 
+router.delete('/cart/:productId',authorize(['user']),removeCartFromList)
+
+router.patch('/cart/empty',authorize(['user']),emptyCartItems)
+
+router.patch('/cart/:productId',authorize(['user']),updateCartProduct);
 // router.get('/trend-products',getProducts)
 
 module.exports = router;
